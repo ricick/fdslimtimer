@@ -19,12 +19,12 @@ namespace SlimTimer
 	public class PluginMain : IPlugin
 	{
         private String pluginName = "SlimTimer";
-        //private String pluginGuid = "f80042e0-7525-11de-800b-0002a5d5c51b";
-        private String pluginGuid = "biscuits";
+        private String pluginGuid = "f80042e0-7525-11de-800b-0002a5d5c51b";
         private String pluginHelp = "www.flashdevelop.org/community/";
         private String pluginDesc = "SlimTimer plugin for FlashDevelop 3.";
         private String pluginAuth = "Phil Douglas";
         private String apiKey = "597e15b6247461868e41b076e49a29";
+        #region Setting Properties
         private String username = "";
         private String password = "";
         private int idleTimeout = 5;
@@ -32,6 +32,10 @@ namespace SlimTimer
         private int minimumTime = 5;
         private int timeoutDuration = 300000;
         private int autoSubmitDuration = 300000;
+        private bool askIgnoreProject = true;
+        private string[] trackedProjects = new string[] { };
+        private string[] ignoredProjects = new string[] { };
+        #endregion
         private String settingFilename;
         private SlimtimerSettings settingObject;
         private DockContent pluginPanel;
@@ -47,6 +51,8 @@ namespace SlimTimer
         private Timer submitTimer;
         private Timer timeoutTimer;
         private bool idle;
+        private bool paused;
+        private bool ignoredProject;
         private string comments;
 	    #region Required Properties
 
@@ -131,6 +137,7 @@ namespace SlimTimer
 		public void HandleEvent(Object sender, NotifyEvent e, HandlingPriority prority)
         {
             //
+            /*
             IProject project = PluginBase.CurrentProject;
             if (project == null)
             {
@@ -140,7 +147,7 @@ namespace SlimTimer
             {
                 log("Is open " + project.Name);
             }
-
+            */
             if (e.Type != EventType.UIClosing)log("HandleEvent " + e.Type.ToString());
             //reset timeout on all events
             resetTimeOut();
@@ -159,7 +166,7 @@ namespace SlimTimer
                 case EventType.Command:
                     string cmd = (e as DataEvent).Action;
                     String comandType = cmd.ToString();
-                   log("cmd " + cmd);
+                   //log("cmd " + cmd);
                     if (cmd == "ProjectManager.Project")
                     {
                         onChangeProject();
@@ -193,6 +200,9 @@ namespace SlimTimer
             idleTimeout = settingObject.IdleTimeout;
             fileComments = settingObject.FileComments;
             minimumTime = settingObject.MinimumTime;
+            askIgnoreProject = settingObject.AskIgnoreProject;
+            trackedProjects = settingObject.TrackedProjects;
+            ignoredProjects = settingObject.IgnoredProjects;
         }
 
         /// <summary>
@@ -229,6 +239,15 @@ namespace SlimTimer
                     break;
                 case "minimumTime":
                     minimumTime = settingObject.MinimumTime;
+                    break;
+                case "askIgnoreProject":
+                    askIgnoreProject = settingObject.AskIgnoreProject;
+                    break;
+                case "trackedProjects":
+                    trackedProjects = settingObject.TrackedProjects;
+                    break;
+                case "ignoredProjects":
+                    ignoredProjects = settingObject.IgnoredProjects;
                     break;
             }
         }
@@ -270,7 +289,7 @@ namespace SlimTimer
             submitTimer.Start();
             timeoutDuration = idleTimeout * 60000;
             if (timeoutDuration == 0) timeoutDuration = 300000;
-           log("timeoutDuration " + timeoutDuration);
+            log("timeoutDuration " + timeoutDuration);
             timeoutTimer = new Timer();
             timeoutTimer.Interval = timeoutDuration;
             timeoutTimer.Tick += new EventHandler(onTimeoutTimerTick);
@@ -321,7 +340,7 @@ namespace SlimTimer
             {
                 loggedIn = api.Logon();
             }
-            catch(Exception exception)
+            catch
             {
                log("couldn't log in as " + username);
                 pluginUI.setStatusText("Cannot log in as " + username+" with supplied password");
@@ -369,12 +388,18 @@ namespace SlimTimer
            catch (Exception exception)
            {
                pluginUI.setStatusText("Error loading tasks for" + username);
+               log("Error loading tasks for" + username + " : " + exception.Message);
            }
             findCurrentTask();
         }
         private void onChangeFile()
         {
            log("onChangeFile");
+           if (ignoredProject)
+           {
+               log("ignoredProject");
+               return;
+           }
             if (timeEntry == null)
             {
                log("no timeentry");
@@ -425,8 +450,8 @@ namespace SlimTimer
         }
         private void findCurrentTask()
         {
+            log("findCurrentTask");
             if (!loggedIn) return;
-           log("findCurrentTask");
             IProject project = PluginBase.CurrentProject;
             if (project == null)
             {
@@ -440,8 +465,76 @@ namespace SlimTimer
             }
 
            log("Project open: " + project.Name);
+           foreach (string ignoredProjectName in ignoredProjects)
+            {
+                if (ignoredProjectName == project.Name)
+                {
+                    ignoredProject = true;
+                    log("ignoring project: " + project.Name);
+                    pluginUI.setTime(new TimeSpan(0));
+                    pluginUI.setProjectText("Not tracking " + project.Name);
+                    return;
+                }
+            }
+           log("ignoredProject: " + ignoredProject);
+            bool inTrackList = false;
+            foreach (string trackedProjectName in trackedProjects)
+            {
+                if (trackedProjectName == project.Name)
+                {
+                    inTrackList = true;
+                    break;
+                }
+            }
+            log("inTrackList: " + inTrackList);
+            if (!inTrackList)
+            {
+                if (askIgnoreProject)
+                {
+                    if (MessageBox.Show("Do you want to track the project " + project.Name + " with slimtimer?", "Untracked project", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        trackProject(project, inTrackList);
+                    }
+                    else
+                    {
+                        ignoreProject(project);
+                    }
+                }
+                else
+                {
+                    trackProject(project, inTrackList);
+                }
+            }
+            else
+            {
+                trackProject(project, inTrackList);
+            }
+        }
+        private void ignoreProject(IProject project)
+        {
+            log("ignoreProject " + project.Name);
+            string[] tempIgnoredProjects = new string[ignoredProjects.Length + 1];
+            ignoredProjects.CopyTo(tempIgnoredProjects, 0);
+            tempIgnoredProjects.SetValue(project.Name, ignoredProjects.Length);
+            ignoredProjects = tempIgnoredProjects;
+            settingObject.IgnoredProjects = ignoredProjects;
+            pluginUI.setTime(new TimeSpan(0));
+            pluginUI.setProjectText("Not tracking " + project.Name);
+        }
+        private void trackProject(IProject project, bool inTrackList)
+        {
+            log("trackProject " + project.Name + " inTrackList " + inTrackList);
+            if (!inTrackList)
+            {
+                string[] tempTrackedProjects = new string[trackedProjects.Length + 1];
+                trackedProjects.CopyTo(tempTrackedProjects, 0);
+                tempTrackedProjects.SetValue(project.Name, trackedProjects.Length);
+                trackedProjects = tempTrackedProjects;
+                settingObject.TrackedProjects = trackedProjects;
+                //trackedProjects = project.Name;
+            }
             //look for task with project name
-            bool found = false;
+            bool inRemoteTasks = false;
             foreach (Task task in tasks)
             {
                log("checking task.Name " + task.Name);
@@ -449,10 +542,10 @@ namespace SlimTimer
                 {
                    log("Found matching task " + task.Name);
                     currentTask = task;
-                    found = true;
+                    inRemoteTasks = true;
                 }
             }
-            if (!found)
+            if (!inRemoteTasks)
             {
                log("Creating new task");
                 currentTask = new Task(project.Name);
@@ -462,7 +555,8 @@ namespace SlimTimer
                 }
                 catch (Exception exception)
                 {
-                    pluginUI.setStatusText("Error creating task for" + username);
+                    pluginUI.setStatusText("Error creating task for " + username);
+                    log("Error creating task for " + username + " : " + exception.Message);
                 }
             }
             if (timeEntry != null)
@@ -500,14 +594,12 @@ namespace SlimTimer
            log("duration = " + duration);
             //int minimumTime = minimumTime;
             if (minimumTime < 1) minimumTime = 1;
-            if (duration.Seconds < minimumTime)
+            timeEntry.Duration = Convert.ToInt32(Math.Floor(duration.TotalSeconds));
+            if (duration.TotalSeconds < minimumTime)
             {
-               log("not enough seconds to submit");
+                log("not enough seconds to submit");
                 return;
             }
-
-            timeEntry.Duration = duration.Seconds;
-
             try
             {
                 timeEntry = api.UpdateTimeEntry(timeEntry);
@@ -517,6 +609,7 @@ namespace SlimTimer
             catch (Exception exception)
             {
                 pluginUI.setStatusText("Error submitting time entry for " + username);
+                log("Error submitting time entry for " + username + " : " + exception.Message);
             }
             //set start time back to cached value (submitting returns server time)
             timeEntry.StartTime = startTime;
@@ -530,7 +623,7 @@ namespace SlimTimer
         }
         private void log(string message){
             //System.Console.WriteLine(message);
-            //TraceManager.Add(message);
+            TraceManager.Add(message);
         }
         /// <summary>
         /// Adds the required event handlers

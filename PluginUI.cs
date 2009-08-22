@@ -11,13 +11,27 @@ namespace SlimTimer
         private Label labelStatus;
         private Label labelTime;
         private Label labelProject;
+        private Button buttonPause;
 		private PluginMain pluginMain;
         
 		public PluginUI(PluginMain pluginMain)
 		{
 			this.InitializeComponent();
 			this.pluginMain = pluginMain;
+            this.buttonPause.Click += new EventHandler(buttonPause_Click);
 		}
+
+        void buttonPause_Click(object sender, EventArgs e)
+        {
+        }
+        public void setPaused(bool paused)
+        {
+            if(paused){
+                buttonPause.Text = "Resume";
+            }else{
+                buttonPause.Text = "Pause";
+            }
+        }
         public void setStatusText(String text){
             this.labelStatus.Text = text;
         }
@@ -41,13 +55,14 @@ namespace SlimTimer
             this.labelStatus = new System.Windows.Forms.Label();
             this.labelTime = new System.Windows.Forms.Label();
             this.labelProject = new System.Windows.Forms.Label();
+            this.buttonPause = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1
+            // labelStatus
             // 
             this.labelStatus.AutoSize = true;
             this.labelStatus.Location = new System.Drawing.Point(3, 0);
-            this.labelStatus.Name = "label1";
+            this.labelStatus.Name = "labelStatus";
             this.labelStatus.Size = new System.Drawing.Size(35, 13);
             this.labelStatus.TabIndex = 1;
             this.labelStatus.Text = "label1";
@@ -66,23 +81,44 @@ namespace SlimTimer
             this.labelProject.AutoSize = true;
             this.labelProject.Location = new System.Drawing.Point(3, 13);
             this.labelProject.Name = "labelProject";
-            this.labelProject.Size = new System.Drawing.Size(69, 13);
+            this.labelProject.Size = new System.Drawing.Size(0, 13);
             this.labelProject.TabIndex = 3;
-            this.labelProject.Text = "";
+            // 
+            // buttonPause
+            // 
+            this.buttonPause.Location = new System.Drawing.Point(6, 42);
+            this.buttonPause.Name = "buttonPause";
+            this.buttonPause.Size = new System.Drawing.Size(75, 23);
+            this.buttonPause.TabIndex = 4;
+            this.buttonPause.Text = "Pause";
+            this.buttonPause.UseVisualStyleBackColor = true;
+            this.buttonPause.Click += new System.EventHandler(this.buttonStartStop_Click);
             // 
             // PluginUI
             // 
+            //this.Controls.Add(this.buttonPause);
             this.Controls.Add(this.labelProject);
             this.Controls.Add(this.labelTime);
             this.Controls.Add(this.labelStatus);
             this.Name = "PluginUI";
             this.Size = new System.Drawing.Size(280, 352);
+            this.Load += new System.EventHandler(this.PluginUI_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
 		}
 
 		#endregion
+
+        private void PluginUI_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonStartStop_Click(object sender, EventArgs e)
+        {
+
+        }
 
 				
  	}
