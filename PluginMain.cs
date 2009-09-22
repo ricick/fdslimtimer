@@ -13,6 +13,7 @@ using PluginCore;
 using Inikus.SlimTimer;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Collections;
 
 namespace SlimTimer
 {
@@ -32,9 +33,11 @@ namespace SlimTimer
         private int minimumTime = 5;
         private int timeoutDuration = 300000;
         private int autoSubmitDuration = 300000;
+        private bool cleanupDuplicates = true;
         private bool askIgnoreProject = true;
         private string[] trackedProjects = new string[] { };
         private string[] ignoredProjects = new string[] { };
+        private string[] projectMap = new string[] { };
         #endregion
         private String settingFilename;
         private SlimtimerSettings settingObject;
@@ -200,9 +203,11 @@ namespace SlimTimer
             idleTimeout = settingObject.IdleTimeout;
             fileComments = settingObject.FileComments;
             minimumTime = settingObject.MinimumTime;
+            cleanupDuplicates = settingObject.CleanupDuplicates;
             askIgnoreProject = settingObject.AskIgnoreProject;
             trackedProjects = settingObject.TrackedProjects;
             ignoredProjects = settingObject.IgnoredProjects;
+            //projectMap = settingObject.ProjectMap;
         }
 
         /// <summary>
@@ -239,6 +244,10 @@ namespace SlimTimer
                     break;
                 case "minimumTime":
                     minimumTime = settingObject.MinimumTime;
+                    break;
+                case "cleanupDuplicates":
+                    cleanupDuplicates = settingObject.CleanupDuplicates;
+                    if (cleanupDuplicates) doCleanDuplicates();
                     break;
                 case "askIgnoreProject":
                     askIgnoreProject = settingObject.AskIgnoreProject;
@@ -390,7 +399,51 @@ namespace SlimTimer
                pluginUI.setStatusText("Error loading tasks for" + username);
                log("Error loading tasks for" + username + " : " + exception.Message);
            }
-            findCurrentTask();
+           if (cleanupDuplicates) doCleanDuplicates();
+           findCurrentTask();
+        }
+        private void doCleanDuplicates()
+        {
+            log("doCleanDuplicates");
+            ArrayList checkedProjects = new ArrayList();
+            Task originalTask = new Task("null");
+            foreach (Task checkTask in tasks)
+            {
+                bool found = false;
+                foreach (Task compareTask in checkedProjects)
+                {
+                    if (compareTask.Name == checkTask.Name)
+                    {
+                        found = true;
+                        originalTask = compareTask;
+                        break;
+                    }
+                }
+                if (found)
+                {
+                    //move entries to original and delete duplicate
+                    //api;
+                    log("Duplicate project found :"+checkTask.Name+" hours = "+checkTask.Hours);
+                    Collection<TimeEntry> potentialEntries = api.ListTimeEntries(checkTask.CreatedTime, checkTask.UpdatedTime);
+                    foreach (TimeEntry checkEntry in potentialEntries)
+                    {
+                        if (checkEntry.RelatedTask.Id == checkTask.Id)
+                        {
+                            log("Entry in duplicate project found :" + checkEntry.StartTime);
+                            //set the timeentry to be associated with the original task and save it
+                            checkEntry.RelatedTask = originalTask;
+                            api.UpdateTimeEntry(checkEntry);
+                        }
+                    }
+                    //delete the task
+                    api.DeleteTask(checkTask.Id);
+                    
+                }
+                else
+                {
+                    checkedProjects.Add(checkTask);
+                }
+            }
         }
         private void onChangeFile()
         {
@@ -621,10 +674,6 @@ namespace SlimTimer
             timeEntry = new TimeEntry(currentTask);
             timeEntry.StartTime = DateTime.Now;
         }
-        private void log(string message){
-            //System.Console.WriteLine(message);
-            TraceManager.Add(message);
-        }
         /// <summary>
         /// Adds the required event handlers
         /// </summary> 
@@ -663,9 +712,21 @@ namespace SlimTimer
             this.pluginUI = new PluginUI(this);
             this.pluginUI.Text = LocaleHelper.GetString("Title.PluginPanel");
             this.pluginPanel = PluginBase.MainForm.CreateDockablePanel(this.pluginUI, this.pluginGuid, this.pluginImage, DockState.DockRight);
-            pluginUI.Show();
+            //pluginUI.Show();
+            pluginUI.PlayPause += onPlayPause;
         }
-
+        private void onPlayPause(object sender, EventArgs e)
+        {
+            if (paused)
+            {
+                paused = false;
+            }
+            else
+            {
+                paused = true;
+            }
+            pluginUI.setPaused(paused);
+        }
         /// <summary>
         /// Opens the plugin panel if closed
         /// </summary>
@@ -674,7 +735,13 @@ namespace SlimTimer
             this.pluginPanel.Show();
         }
 
-		#endregion
+        #endregion
+
+        private void log(string message)
+        {
+            System.Console.WriteLine(message);
+            //TraceManager.Add(message);
+        }
 
 	}
 	

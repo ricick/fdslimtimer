@@ -18,10 +18,11 @@ namespace SlimTimer
         private int idleTimeout = 5;
         private bool fileComments = true;
         private int minimumTime = 5;
+        private bool cleanupDuplicates = true;
         private bool askIgnoreProject = true;
         private string[] trackedProjects = new string[] { };
         private string[] ignoredProjects = new string[] { };
-        //private string[] projectMappings = new string[];
+        //private string[] projectMap = new string[] { };
 
         /// <summary> 
         /// Get and sets the password
@@ -90,6 +91,19 @@ namespace SlimTimer
             }
         }
         /// <summary> 
+        /// Get and sets the cleanupDuplicates
+        /// </summary>
+        [Description("Clean up duplicate projects on launch."), DefaultValue(true)]
+        public bool CleanupDuplicates
+        {
+            get { return this.cleanupDuplicates; }
+            set
+            {
+                this.cleanupDuplicates = value;
+                FireChanged("cleanupDuplicates");
+            }
+        }
+        /// <summary> 
         /// Get and sets the askIgnoreProject
         /// </summary>
         [Description("Ask about ignoring a previously unopened project."), DefaultValue(true)]
@@ -128,6 +142,21 @@ namespace SlimTimer
                 FireChanged("ignoredProjects");
             }
         }
+        /*
+        /// <summary> 
+        /// Get and sets the projectMap
+        /// </summary>
+        [DisplayName("Project Map")]
+        public string[] ProjectMap
+        {
+            get { return this.projectMap; }
+            set
+            {
+                this.projectMap = value;
+                FireChanged("projectMap");
+            }
+        }
+        */
         private void FireChanged(string setting)
         {
             if (Changed != null)
