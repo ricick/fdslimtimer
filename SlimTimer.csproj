@@ -78,12 +78,9 @@
     </Compile>
     <Compile Include="Resources\LocaleHelper.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Timer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SlimTimerAPI\SlimTimerApi.csproj">
-      <Project>{68815440-FD20-40C2-9AC6-B228CE0F8F73}</Project>
-      <Name>SlimTimerApi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FD3\PluginCore\PluginCore.csproj">
       <Project>{61885F70-B4DC-4B44-852D-5D6D03F2A734}</Project>
       <Name>PluginCore</Name>
