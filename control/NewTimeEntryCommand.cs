@@ -8,13 +8,18 @@ using Inikus.SlimTimer;
 
 namespace SlimTimer.control
 {
-    class SetCurrentTaskCommand : SimpleCommand
+    class NewTimeEntryCommand : SimpleCommand
     {
         public override void Execute(INotification notification)
         {
             base.Execute(notification);
+
             TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
-            taskProxy.CurrentTask = notification.Body as Task;
+
+            taskProxy.Comments = "";
+            //The required fields are StartTime, EndTime, Duration, and RelatedTask.
+            TimeEntry timeEntry = new TimeEntry(taskProxy.CurrentTask);
+            timeEntry.StartTime = DateTime.Now;
         }
 
     }

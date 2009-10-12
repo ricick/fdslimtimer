@@ -18,6 +18,7 @@ namespace SlimTimer
         public static String SAVE_TIME_ENTRY = "SAVE_TIME_ENTRY";
         public static String SELECT_TRACKING = "SELECT_TRACKING";
         public static String RESET_TIMEOUT = "RESET_TIMEOUT";
+        public static String CLEANUP_DUPLICATES = "CLEANUP_DUPLICATES";
         protected static ApplicationFacade instance;
         protected ApplicationFacade() { }
 
@@ -44,6 +45,7 @@ namespace SlimTimer
             RegisterCommand(SAVE_TIME_ENTRY, typeof(SaveTimeEntryCommand));
             RegisterCommand(SELECT_TRACKING, typeof(SelectTracking));
             RegisterCommand(RESET_TIMEOUT, typeof(ResetTimeoutCommand));
+            RegisterCommand(CLEANUP_DUPLICATES, typeof(CleanDuplicatesCommand));
         }
     }
 }

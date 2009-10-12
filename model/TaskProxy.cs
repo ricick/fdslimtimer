@@ -14,6 +14,7 @@ namespace SlimTimer.model
         public static String CHANGE_TASKS = "CHANGE_TASKS";
         public static String CHANGE_CURRENT_TASK = "CHANGE_CURRENT_TASK";
         public static String CHANGE_CURRENT_TIME_ENTRY = "CHANGE_CURRENT_TIME_ENTRY";
+        public static String CHANGE_COMMENTS = "CHANGE_COMMENTS";
         public TaskProxy():base(NAME)
         {
         }
@@ -45,6 +46,17 @@ namespace SlimTimer.model
             set {
                 currentTask = value;
                 SendNotification(CHANGE_CURRENT_TASK, value);
+            }
+        }
+
+        private String comments;
+
+        public String Comments
+        {
+            get { return comments; }
+            set {
+                comments = value;
+                SendNotification(CHANGE_COMMENTS, value);
             }
         }
     }
