@@ -11,9 +11,9 @@ namespace SlimTimer.control
         {
             base.InitializeMacroCommand();
             AddSubCommand(typeof(ModelPrepCommand));
-            AddSubCommand(typeof(ViewPrepCommand));
-            AddSubCommand(typeof(LoadSettingsCommand));
-            AddSubCommand(typeof(LoginCommand));
+            //AddSubCommand(typeof(ViewPrepCommand));
+            //AddSubCommand(typeof(LoadSettingsCommand));
+            //AddSubCommand(typeof(LoginCommand));
         }
     }
 }

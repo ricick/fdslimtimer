@@ -117,7 +117,7 @@ namespace SlimTimer.view
 		/// </summary>
 		public void Dispose()
 		{
-            dispose(this, new EventArgs());
+            if (dispose != null) dispose(this, new EventArgs());
 		}
 		
 		/// <summary>
@@ -125,11 +125,11 @@ namespace SlimTimer.view
 		/// </summary>
 		public void HandleEvent(Object sender, NotifyEvent e, HandlingPriority prority)
         {
-            interaction(this, new EventArgs());
+            if (interaction != null) interaction(this, new EventArgs());
             switch (e.Type)
             {
                 case EventType.FileOpen:
-                   changeFile(this, new ChangeFileEventArgs(PluginBase.MainForm.CurrentDocument));
+                    if (changeFile != null) changeFile(this, new ChangeFileEventArgs(PluginBase.MainForm.CurrentDocument));
                     break;
 
                 case EventType.Command:
@@ -137,7 +137,7 @@ namespace SlimTimer.view
                     String comandType = cmd.ToString();
                     if (cmd == "ProjectManager.Project")
                     {
-                        changeProject(this, new ChangeProjectEventArgs(PluginBase.CurrentProject));
+                        if (changeProject != null) changeProject(this, new ChangeProjectEventArgs(PluginBase.CurrentProject));
                     }
                     break;
             }
