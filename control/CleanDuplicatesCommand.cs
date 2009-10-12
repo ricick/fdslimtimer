@@ -16,6 +16,7 @@ namespace SlimTimer.control
         {
             base.Execute(notification);
             TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
+            APIProxy apiProxy = Facade.RetrieveProxy(APIProxy.NAME) as APIProxy;
 
             Collection<Task> tasks = taskProxy.Tasks;
 
@@ -38,7 +39,7 @@ namespace SlimTimer.control
                     //move entries to original and delete duplicate
                     //api;
                     //log("Duplicate project found :" + checkTask.Name + " hours = " + checkTask.Hours);
-                    Collection<TimeEntry> potentialEntries = api.ListTimeEntries(checkTask.CreatedTime, checkTask.UpdatedTime);
+                    Collection<TimeEntry> potentialEntries = apiProxy.Api.ListTimeEntries(checkTask.CreatedTime, checkTask.UpdatedTime);
                     foreach (TimeEntry checkEntry in potentialEntries)
                     {
                         if (checkEntry.RelatedTask.Id == checkTask.Id)
@@ -46,11 +47,11 @@ namespace SlimTimer.control
                             //log("Entry in duplicate project found :" + checkEntry.StartTime);
                             //set the timeentry to be associated with the original task and save it
                             checkEntry.RelatedTask = originalTask;
-                            api.UpdateTimeEntry(checkEntry);
+                            apiProxy.Api.UpdateTimeEntry(checkEntry);
                         }
                     }
                     //delete the task
-                    api.DeleteTask(checkTask.Id);
+                    apiProxy.Api.DeleteTask(checkTask.Id);
 
                 }
                 else

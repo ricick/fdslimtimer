@@ -5,6 +5,8 @@ using PureMVC.Patterns;
 using PureMVC.Interfaces;
 using SlimTimer.model;
 using PluginCore;
+using Inikus.SlimTimer;
+using System.Windows.Forms;
 
 namespace SlimTimer.control
 {
@@ -13,55 +15,61 @@ namespace SlimTimer.control
         public override void Execute(INotification notification)
         {
             base.Execute(notification);
-            log("onChangeProject");
+            TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
+            TimerProxy timerProxy = Facade.RetrieveProxy(TimerProxy.NAME) as TimerProxy;
+            StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
+            //log("onChangeProject");
             //IProject project = PluginBase.CurrentProject;
             IProject project = notification.Body as IProject;
-            timer.Stop();
+            timerProxy.Timer.Stop();
             if (project == null)
             {
-                log("Project closed");
-                currentTask = null;
-                timeEntry = null;
-                ui.setProjectText("No project open");
+                //log("Project closed");
+                taskProxy.CurrentTask = null;
+                taskProxy.CurrentTimeEntry = null;
+                statusProxy.ProjectText = ("No project open");
             }
             else
             {
-                ui.setProjectText(project.Name);
+                statusProxy.ProjectText = (project.Name);
                 findCurrentTask();
             }
         }
         private void findCurrentTask()
         {
-            log("findCurrentTask");
-            if (!loggedIn) return;
+            SettingsProxy settingsProxy = Facade.RetrieveProxy(SettingsProxy.NAME) as SettingsProxy;
+            StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
+            TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
+            //log("findCurrentTask");
+            if (!statusProxy.LoggedIn) return;
             IProject project = PluginBase.CurrentProject;
             if (project == null)
             {
-                log("No project");
+                //log("No project");
                 return;
             }
-            if (tasks == null || !loadedTasks)
+            if (taskProxy.Tasks == null || !statusProxy.LoadedTasks)
             {
-                log("No tasks");
+                //log("No tasks");
                 return;
             }
 
-            log("Project open: " + project.Name);
-            foreach (string ignoredProjectName in ignoredProjects)
+            //log("Project open: " + project.Name);
+            foreach (string ignoredProjectName in settingsProxy.IgnoredProjects)
             {
                 if (ignoredProjectName == project.Name)
                 {
-                    ignoredProject = true;
-                    log("ignoring project: " + project.Name);
-                    ui.setTime(new TimeSpan(0));
-                    ui.setProjectText("Not tracking " + project.Name);
-                    ui.setTracking(false);
+                    statusProxy.IgnoredProject = true;
+                    //log("ignoring project: " + project.Name);
+                    statusProxy.Time = (new TimeSpan(0));
+                    statusProxy.ProjectText = ("Not tracking " + project.Name);
+                    statusProxy.Tracking = false;
                     return;
                 }
             }
-            log("ignoredProject: " + ignoredProject);
+            //log("ignoredProject: " + ignoredProject);
             bool inTrackList = false;
-            foreach (string trackedProjectName in trackedProjects)
+            foreach (string trackedProjectName in settingsProxy.TrackedProjects)
             {
                 if (trackedProjectName == project.Name)
                 {
@@ -69,10 +77,10 @@ namespace SlimTimer.control
                     break;
                 }
             }
-            log("inTrackList: " + inTrackList);
+            //log("inTrackList: " + inTrackList);
             if (!inTrackList)
             {
-                if (askIgnoreProject)
+                if (settingsProxy.AskIgnoreProject)
                 {
                     if (MessageBox.Show("Do you want to track the project " + project.Name + " with slimtimer?", "Untracked project", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
@@ -95,65 +103,70 @@ namespace SlimTimer.control
         }
         private void ignoreProject(IProject project)
         {
-            log("ignoreProject " + project.Name);
-            string[] tempIgnoredProjects = new string[ignoredProjects.Length + 1];
-            ignoredProjects.CopyTo(tempIgnoredProjects, 0);
-            tempIgnoredProjects.SetValue(project.Name, ignoredProjects.Length);
-            ignoredProjects = tempIgnoredProjects;
-            settingObject.IgnoredProjects = ignoredProjects;
-            ui.setTime(new TimeSpan(0));
-            ui.setProjectText("Not tracking " + project.Name);
+            SettingsProxy settingsProxy = Facade.RetrieveProxy(SettingsProxy.NAME) as SettingsProxy;
+            StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
+            //log("ignoreProject " + project.Name);
+            string[] tempIgnoredProjects = new string[settingsProxy.IgnoredProjects.Length + 1];
+            settingsProxy.IgnoredProjects.CopyTo(tempIgnoredProjects, 0);
+            tempIgnoredProjects.SetValue(project.Name, settingsProxy.IgnoredProjects.Length);
+            settingsProxy.IgnoredProjects = tempIgnoredProjects;
+            statusProxy.Time = (new TimeSpan(0));
+            statusProxy.ProjectText = ("Not tracking " + project.Name);
         }
         private void trackProject(IProject project, bool inTrackList)
         {
-            log("trackProject " + project.Name + " inTrackList " + inTrackList);
+            StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
+            SettingsProxy settingsProxy = Facade.RetrieveProxy(SettingsProxy.NAME) as SettingsProxy;
+            TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
+            APIProxy apiProxy = Facade.RetrieveProxy(APIProxy.NAME) as APIProxy;
+            TimerProxy timerProxy = Facade.RetrieveProxy(TimerProxy.NAME) as TimerProxy;
+            //log("trackProject " + project.Name + " inTrackList " + inTrackList);
             if (!inTrackList)
             {
-                string[] tempTrackedProjects = new string[trackedProjects.Length + 1];
-                trackedProjects.CopyTo(tempTrackedProjects, 0);
-                tempTrackedProjects.SetValue(project.Name, trackedProjects.Length);
-                trackedProjects = tempTrackedProjects;
-                settingObject.TrackedProjects = trackedProjects;
+                string[] tempTrackedProjects = new string[settingsProxy.TrackedProjects.Length + 1];
+                settingsProxy.TrackedProjects.CopyTo(tempTrackedProjects, 0);
+                tempTrackedProjects.SetValue(project.Name, settingsProxy.TrackedProjects.Length);
+                settingsProxy.TrackedProjects = tempTrackedProjects;
+                //settingObject.TrackedProjects = settingsProxy.TrackedProjects;
                 //trackedProjects = project.Name;
             }
             //look for task with project name
             bool inRemoteTasks = false;
-            foreach (Task task in tasks)
+            foreach (Task task in taskProxy.Tasks)
             {
-                log("checking task.Name " + task.Name);
+                //log("checking task.Name " + task.Name);
                 if (task.Name == project.Name)
                 {
-                    log("Found matching task " + task.Name);
-                    currentTask = task;
+                    //log("Found matching task " + task.Name);
+                    taskProxy.CurrentTask = task;
                     inRemoteTasks = true;
                 }
             }
             if (!inRemoteTasks)
             {
-                log("Creating new task");
-                currentTask = new Task(project.Name);
+                //log("Creating new task");
+                taskProxy.CurrentTask = new Task(project.Name);
                 try
                 {
-                    currentTask = api.UpdateTask(currentTask);
+                    taskProxy.CurrentTask = apiProxy.Api.UpdateTask(taskProxy.CurrentTask);
                 }
                 catch (Exception exception)
                 {
-                    ui.setStatusText("Error creating task for " + username);
-                    log("exception.Source : " + exception.Source);
-                    log("exception.StackTrace : " + exception.StackTrace);
-                    log("exception.Message : " + exception.Message);
-                    log("exception.Data : " + exception.Data);
-                    log("Error creating task for " + username + " : " + exception.Message);
+                    statusProxy.StatusText = ("Error creating task for " + settingsProxy.Username);
+                    //log("exception.Source : " + exception.Source);
+                    //log("exception.StackTrace : " + exception.StackTrace);
+                    //log("exception.Message : " + exception.Message);
+                    //log("exception.Data : " + exception.Data);
+                    Console.WriteLine("Error creating task for " + settingsProxy.Username + " : " + exception.Message);
                 }
             }
-            if (timeEntry != null)
+            if (taskProxy.CurrentTimeEntry != null)
             {
-                submitTimeEntry();
+                SendNotification(ApplicationFacade.SAVE_TIME_ENTRY);
             }
-            ui.setCurrentTask(currentTask);
-            ui.setTracking(true);
-            createNewTimeEntry();
-            timer.Start();
+            statusProxy.Tracking = false;
+            SendNotification(ApplicationFacade.NEW_TIME_ENTRY);
+            timerProxy.Timer.Start();
         }
 
     }

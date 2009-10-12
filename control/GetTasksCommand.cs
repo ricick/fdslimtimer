@@ -27,6 +27,7 @@ namespace SlimTimer.control
             catch (Exception exception)
             {
                 statusProxy.StatusText = ("Error loading tasks for" + settingsProxy.Username);
+                Console.WriteLine("Error loading tasks for" + settingsProxy.Username + " : " + exception.Message);
                 /*
                 log("exception.Source : " + exception.Source);
                 log("exception.StackTrace : " + exception.StackTrace);
@@ -37,7 +38,8 @@ namespace SlimTimer.control
             }
             if (settingsProxy.CleanupDuplicates) SendNotification(ApplicationFacade.CLEANUP_DUPLICATES);
             //ui.setTasks(tasks);
-            findCurrentTask();
+            //findCurrentTask();
+            SendNotification(ApplicationFacade.SET_CURRENT_TASK, taskProxy.CurrentTask);
         }
 
     }

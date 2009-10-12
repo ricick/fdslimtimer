@@ -14,6 +14,7 @@ namespace SlimTimer.control
             Console.WriteLine(notification.ToString());
             Facade.RegisterProxy(new SettingsProxy());
             Facade.RegisterProxy(new TaskProxy());
+            Facade.RegisterProxy(new TimerProxy());
             Facade.RegisterProxy(new APIProxy());
         }
     }

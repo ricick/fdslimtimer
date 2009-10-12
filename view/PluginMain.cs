@@ -129,7 +129,7 @@ namespace SlimTimer.view
             switch (e.Type)
             {
                 case EventType.FileOpen:
-                   changeFile(this, new EventArgs());
+                   changeFile(this, new ChangeFileEventArgs(PluginBase.MainForm.CurrentDocument));
                     break;
 
                 case EventType.Command:
@@ -137,7 +137,7 @@ namespace SlimTimer.view
                     String comandType = cmd.ToString();
                     if (cmd == "ProjectManager.Project")
                     {
-                        changeProject(this, new EventArgs());
+                        changeProject(this, new ChangeProjectEventArgs(PluginBase.CurrentProject));
                     }
                     break;
             }
@@ -222,5 +222,22 @@ namespace SlimTimer.view
 
         #endregion
 	}
-	
+    class ChangeFileEventArgs : EventArgs
+    {
+        public ITabbedDocument file;
+        public ChangeFileEventArgs(ITabbedDocument file)
+            : base()
+        {
+            this.file = file;
+        }
+    }
+    class ChangeProjectEventArgs : EventArgs
+    {
+        public IProject project;
+        public ChangeProjectEventArgs(IProject project)
+            : base()
+        {
+            this.project = project;
+        }
+    }
 }

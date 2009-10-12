@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using PureMVC.Patterns;
+using SlimTimer.model;
 
 namespace SlimTimer.view
 {
@@ -30,6 +31,22 @@ namespace SlimTimer.view
             {
                 return ViewComponent as PluginUI;
             }
+        }
+        public override IList<string> ListNotificationInterests()
+        {
+            return new List<string>();
+        }
+        public override void HandleNotification(PureMVC.Interfaces.INotification notification)
+        {
+            base.HandleNotification(notification);
+            /*
+            switch (notification.Name)
+            {
+                case StatusProxy.CHANGE_STATUS_TEXT:
+                    pluginUI.setStatusText(notification.Body as String);
+                    break;
+            }
+             * */
         }
     }
 }

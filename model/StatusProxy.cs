@@ -15,6 +15,10 @@ namespace SlimTimer.model
         public static String CHANGE_LOADED_TASKS = "CHANGE_LOADED_TASKS";
         public static String CHANGE_IDLE = "CHANGE_IDLE";
         public static String CHANGE_TIME = "CHANGE_TIME";
+        public static String CHANGE_IGNORED_PROJECT = "CHANGE_IGNORED_PROJECT";
+        public static String CHANGE_LOGGED_IN = "CHANGE_LOGGED_IN";
+        public static String CHANGE_PROJECT_TEXT = "CHANGE_PROJECT_TEXT";
+        public static String CHANGE_TRACKING = "CHANGE_TRACKING";
         public StatusProxy()
             : base(NAME)
         {
@@ -30,6 +34,19 @@ namespace SlimTimer.model
             }
         }
 
+
+        private String projectText;
+
+        public String ProjectText
+        {
+            get { return projectText; }
+            set
+            {
+                projectText = value;
+                SendNotification(CHANGE_PROJECT_TEXT, value);
+            }
+        }
+
         private Boolean loadedTasks;
 
         public Boolean LoadedTasks
@@ -42,6 +59,29 @@ namespace SlimTimer.model
             }
         }
 
+        private Boolean ignoredProject;
+
+        public Boolean IgnoredProject
+        {
+            get { return ignoredProject; }
+            set
+            {
+                ignoredProject = value;
+                SendNotification(CHANGE_IGNORED_PROJECT, value);
+            }
+        }
+
+        private Boolean loggedIn;
+
+        public Boolean LoggedIn
+        {
+            get { return loggedIn; }
+            set
+            {
+                loggedIn = value;
+                SendNotification(CHANGE_LOGGED_IN, value);
+            }
+        }
         private Boolean idle;
 
         public Boolean Idle
@@ -63,6 +103,18 @@ namespace SlimTimer.model
             {
                 time = value;
                 SendNotification(CHANGE_TIME, value);
+            }
+        }
+
+        private Boolean tracking;
+
+        public Boolean Tracking
+        {
+            get { return tracking; }
+            set
+            {
+                tracking = value;
+                SendNotification(CHANGE_TRACKING, value);
             }
         }
     }

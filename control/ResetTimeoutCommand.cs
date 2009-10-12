@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using PureMVC.Patterns;
 using SlimTimer.model;
+using PureMVC.Interfaces;
 
 namespace SlimTimer.control
 {
@@ -12,8 +12,8 @@ namespace SlimTimer.control
         public override void Execute(INotification notification)
         {
             base.Execute(notification);
-            APIProxy apiProxy = Facade.RetrieveProxy(APIProxy.NAME) as APIProxy;
-            apiProxy.ResetTimeout();
+            TimerProxy timerProxy = Facade.RetrieveProxy(TimerProxy.NAME) as TimerProxy;
+            timerProxy.ResetTimeOut();
         }
     }
 }

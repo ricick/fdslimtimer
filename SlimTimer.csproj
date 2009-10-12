@@ -67,7 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationFacade.cs" />
+    <Compile Include="control\ApplicationShutdownCommand.cs" />
     <Compile Include="control\ApplicationStartupCommand.cs" />
+    <Compile Include="control\ChangeFileCommand.cs" />
+    <Compile Include="control\ChangeProjectCommand.cs" />
+    <Compile Include="control\NewTimeEntryCommand.cs" />
+    <Compile Include="control\ResetTimeoutCommand.cs" />
     <Compile Include="control\SetCurrentTaskCommand.cs" />
     <Compile Include="control\GetTasksCommand.cs" />
     <Compile Include="control\LoadSettingsCommand.cs" />
@@ -78,11 +83,13 @@
     <Compile Include="control\SaveSettingsCommand.cs" />
     <Compile Include="control\SaveTimeEntryCommand.cs" />
     <Compile Include="control\SelectTracking.cs" />
-    <Compile Include="control\TimeoutCommand.cs" />
+    <Compile Include="control\CleanDuplicatesCommand.cs" />
     <Compile Include="control\ViewPrepCommand.cs" />
     <Compile Include="model\APIProxy.cs" />
     <Compile Include="model\SettingsProxy.cs" />
+    <Compile Include="model\StatusProxy.cs" />
     <Compile Include="model\TaskProxy.cs" />
+    <Compile Include="model\TimerProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="view\PluginMain.cs" />
     <Compile Include="view\PluginMainMediator.cs" />
