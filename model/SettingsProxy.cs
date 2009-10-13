@@ -166,6 +166,7 @@ namespace SlimTimer.model
         }
         public void LoadSettings()
         {
+            Console.WriteLine("LoadSettings");
             this.settingObject = new SlimtimerSettings();
             if (!File.Exists(this.settingFilename)) this.SaveSettings();
             else
@@ -175,7 +176,9 @@ namespace SlimTimer.model
             }
             settingObject.Changed += SettingChanged;
             Username = settingObject.Username;
+            Console.WriteLine("Username " + Username);
             Password = settingObject.Password;
+            Console.WriteLine("Password " + Password);
             IdleTimeout = settingObject.IdleTimeout;
             FileComments = settingObject.FileComments;
             MinimumTime = settingObject.MinimumTime;

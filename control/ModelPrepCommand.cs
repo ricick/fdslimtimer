@@ -13,6 +13,7 @@ namespace SlimTimer.control
             base.Execute(notification);
             Console.WriteLine(notification.ToString());
             Facade.RegisterProxy(new SettingsProxy());
+            Facade.RegisterProxy(new StatusProxy());
             Facade.RegisterProxy(new TaskProxy());
             Facade.RegisterProxy(new TimerProxy());
             Facade.RegisterProxy(new APIProxy());

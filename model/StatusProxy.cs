@@ -11,14 +11,14 @@ namespace SlimTimer.model
     class StatusProxy : Proxy
     {
         public static new String NAME = "StatusProxy";
-        public static String CHANGE_STATUS_TEXT = "CHANGE_STATUS_TEXT";
-        public static String CHANGE_LOADED_TASKS = "CHANGE_LOADED_TASKS";
-        public static String CHANGE_IDLE = "CHANGE_IDLE";
-        public static String CHANGE_TIME = "CHANGE_TIME";
-        public static String CHANGE_IGNORED_PROJECT = "CHANGE_IGNORED_PROJECT";
-        public static String CHANGE_LOGGED_IN = "CHANGE_LOGGED_IN";
-        public static String CHANGE_PROJECT_TEXT = "CHANGE_PROJECT_TEXT";
-        public static String CHANGE_TRACKING = "CHANGE_TRACKING";
+        public const String CHANGE_STATUS_TEXT = "CHANGE_STATUS_TEXT";
+        public const String CHANGE_LOADED_TASKS = "CHANGE_LOADED_TASKS";
+        public const String CHANGE_IDLE = "CHANGE_IDLE";
+        public const String CHANGE_TIME = "CHANGE_TIME";
+        public const String CHANGE_IGNORED_PROJECT = "CHANGE_IGNORED_PROJECT";
+        public const String CHANGE_LOGGED_IN = "CHANGE_LOGGED_IN";
+        public const String CHANGE_PROJECT_TEXT = "CHANGE_PROJECT_TEXT";
+        public const String CHANGE_TRACKING = "CHANGE_TRACKING";
         public StatusProxy()
             : base(NAME)
         {

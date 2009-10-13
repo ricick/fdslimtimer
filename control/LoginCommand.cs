@@ -27,23 +27,23 @@ namespace SlimTimer.control
             timerProxy.TimeoutTimer.Stop();
             if (username == "Username" || username == "username" || username == "" || password == "")
             {
-                ////log("No user or pass");
+                Console.WriteLine("No user or pass");
                 statusProxy.StatusText = ("Notlogged in");
                 return;
             }
             apiProxy.Api = new SlimTimerApi(username, password, apiProxy.ApiKey);
-            ////log("apiKey " + apiKey);
+            //Console.WriteLine("apiKey " + apiKey);
             try
             {
                 statusProxy.LoggedIn = apiProxy.Api.Logon();
             }
             catch
             {
-                ////log("couldn't log in as " + username);
+                Console.WriteLine("couldn't log in as " + username);
                 statusProxy.StatusText = ("Cannot log in as " + username + " with supplied password");
                 return;
             }
-            ////log("loggedIn " + loggedIn);
+            Console.WriteLine("statusProxy.LoggedIn " + statusProxy.LoggedIn);
             statusProxy.StatusText = ("Logged in as " + username);
             if (!statusProxy.LoggedIn) return;
             //loadTasks();
