@@ -66,9 +66,34 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationFacade.cs" />
+    <Compile Include="control\ApplicationShutdownCommand.cs" />
+    <Compile Include="control\ApplicationStartupCommand.cs" />
+    <Compile Include="control\ChangeFileCommand.cs" />
+    <Compile Include="control\ChangeProjectCommand.cs" />
+    <Compile Include="control\NewTimeEntryCommand.cs" />
+    <Compile Include="control\ResetTimeoutCommand.cs" />
+    <Compile Include="control\SetCurrentTaskCommand.cs" />
+    <Compile Include="control\GetTasksCommand.cs" />
+    <Compile Include="control\LoadSettingsCommand.cs" />
+    <Compile Include="control\LoginCommand.cs" />
+    <Compile Include="control\ModelPrepCommand.cs" />
+    <Compile Include="control\PauseCommand.cs" />
+    <Compile Include="control\ResumeCommand.cs" />
+    <Compile Include="control\SaveSettingsCommand.cs" />
+    <Compile Include="control\SaveTimeEntryCommand.cs" />
+    <Compile Include="control\SelectTracking.cs" />
+    <Compile Include="control\CleanDuplicatesCommand.cs" />
+    <Compile Include="control\ViewPrepCommand.cs" />
+    <Compile Include="model\APIProxy.cs" />
+    <Compile Include="model\SettingsProxy.cs" />
+    <Compile Include="model\StatusProxy.cs" />
+    <Compile Include="model\TaskProxy.cs" />
+    <Compile Include="model\TimerProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PluginMain.cs" />
-    <Compile Include="PluginUI.cs">
+    <Compile Include="view\PluginMain.cs" />
+    <Compile Include="view\PluginMainMediator.cs" />
+    <Compile Include="view\PluginUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -76,9 +101,31 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="puremvc\Core\Controller.cs" />
+    <Compile Include="puremvc\Core\Model.cs" />
+    <Compile Include="puremvc\Core\View.cs" />
+    <Compile Include="puremvc\Interfaces\ICommand.cs" />
+    <Compile Include="puremvc\Interfaces\IController.cs" />
+    <Compile Include="puremvc\Interfaces\IFacade.cs" />
+    <Compile Include="puremvc\Interfaces\IMediator.cs" />
+    <Compile Include="puremvc\Interfaces\IModel.cs" />
+    <Compile Include="puremvc\Interfaces\INotification.cs" />
+    <Compile Include="puremvc\Interfaces\INotifier.cs" />
+    <Compile Include="puremvc\Interfaces\IObserver.cs" />
+    <Compile Include="puremvc\Interfaces\IProxy.cs" />
+    <Compile Include="puremvc\Interfaces\IView.cs" />
+    <Compile Include="puremvc\Patterns\Command\MacroCommand.cs" />
+    <Compile Include="puremvc\Patterns\Command\SimpleCommand.cs" />
+    <Compile Include="puremvc\Patterns\Facade\Facade.cs" />
+    <Compile Include="puremvc\Patterns\Mediator\Mediator.cs" />
+    <Compile Include="puremvc\Patterns\Observer\Notification.cs" />
+    <Compile Include="puremvc\Patterns\Observer\Notifier.cs" />
+    <Compile Include="puremvc\Patterns\Observer\Observer.cs" />
+    <Compile Include="puremvc\Patterns\Proxy\Proxy.cs" />
     <Compile Include="Resources\LocaleHelper.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="vo\Settings.cs" />
     <Compile Include="Timer.cs" />
+    <Compile Include="view\PluginUIMediator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FD3\PluginCore\PluginCore.csproj">
@@ -88,7 +135,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PluginUI.resx">
+    <EmbeddedResource Include="view\PluginUI.resx">
       <DependentUpon>PluginUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
