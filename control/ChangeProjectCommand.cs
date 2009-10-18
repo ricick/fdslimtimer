@@ -15,16 +15,17 @@ namespace SlimTimer.control
         public override void Execute(INotification notification)
         {
             base.Execute(notification);
+            Console.WriteLine("ChangeProjectCommand.Execute");
             TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
             TimerProxy timerProxy = Facade.RetrieveProxy(TimerProxy.NAME) as TimerProxy;
             StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
-            //log("onChangeProject");
+            Console.WriteLine("onChangeProject");
             //IProject project = PluginBase.CurrentProject;
             IProject project = notification.Body as IProject;
             timerProxy.Timer.Stop();
             if (project == null)
             {
-                //log("Project closed");
+                Console.WriteLine("Project closed");
                 taskProxy.CurrentTask = null;
                 taskProxy.CurrentTimeEntry = null;
                 statusProxy.ProjectText = ("No project open");
@@ -40,34 +41,34 @@ namespace SlimTimer.control
             SettingsProxy settingsProxy = Facade.RetrieveProxy(SettingsProxy.NAME) as SettingsProxy;
             StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
             TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
-            //log("findCurrentTask");
+            Console.WriteLine("findCurrentTask");
             if (!statusProxy.LoggedIn) return;
             IProject project = PluginBase.CurrentProject;
             if (project == null)
             {
-                //log("No project");
+                Console.WriteLine("No project");
                 return;
             }
             if (taskProxy.Tasks == null || !statusProxy.LoadedTasks)
             {
-                //log("No tasks");
+                Console.WriteLine("No tasks");
                 return;
             }
 
-            //log("Project open: " + project.Name);
+            Console.WriteLine("Project open: " + project.Name);
             foreach (string ignoredProjectName in settingsProxy.IgnoredProjects)
             {
                 if (ignoredProjectName == project.Name)
                 {
                     statusProxy.IgnoredProject = true;
-                    //log("ignoring project: " + project.Name);
+                    Console.WriteLine("ignoring project: " + project.Name);
                     statusProxy.Time = (new TimeSpan(0));
                     statusProxy.ProjectText = ("Not tracking " + project.Name);
                     statusProxy.Tracking = false;
                     return;
                 }
             }
-            //log("ignoredProject: " + ignoredProject);
+            Console.WriteLine("statusProxy.IgnoredProject: " + statusProxy.IgnoredProject);
             bool inTrackList = false;
             foreach (string trackedProjectName in settingsProxy.TrackedProjects)
             {
@@ -77,7 +78,7 @@ namespace SlimTimer.control
                     break;
                 }
             }
-            //log("inTrackList: " + inTrackList);
+            Console.WriteLine("inTrackList: " + inTrackList);
             if (!inTrackList)
             {
                 if (settingsProxy.AskIgnoreProject)
@@ -105,7 +106,7 @@ namespace SlimTimer.control
         {
             SettingsProxy settingsProxy = Facade.RetrieveProxy(SettingsProxy.NAME) as SettingsProxy;
             StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
-            //log("ignoreProject " + project.Name);
+            Console.WriteLine("ignoreProject " + project.Name);
             string[] tempIgnoredProjects = new string[settingsProxy.IgnoredProjects.Length + 1];
             settingsProxy.IgnoredProjects.CopyTo(tempIgnoredProjects, 0);
             tempIgnoredProjects.SetValue(project.Name, settingsProxy.IgnoredProjects.Length);
@@ -120,7 +121,7 @@ namespace SlimTimer.control
             TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
             APIProxy apiProxy = Facade.RetrieveProxy(APIProxy.NAME) as APIProxy;
             TimerProxy timerProxy = Facade.RetrieveProxy(TimerProxy.NAME) as TimerProxy;
-            //log("trackProject " + project.Name + " inTrackList " + inTrackList);
+            Console.WriteLine("trackProject " + project.Name + " inTrackList " + inTrackList);
             if (!inTrackList)
             {
                 string[] tempTrackedProjects = new string[settingsProxy.TrackedProjects.Length + 1];
@@ -134,17 +135,18 @@ namespace SlimTimer.control
             bool inRemoteTasks = false;
             foreach (Task task in taskProxy.Tasks)
             {
-                //log("checking task.Name " + task.Name);
+                Console.WriteLine("checking task.Name " + task.Name);
                 if (task.Name == project.Name)
                 {
-                    //log("Found matching task " + task.Name);
+                    Console.WriteLine("Found matching task " + task.Name);
                     taskProxy.CurrentTask = task;
                     inRemoteTasks = true;
+                    break;
                 }
             }
             if (!inRemoteTasks)
             {
-                //log("Creating new task");
+                Console.WriteLine("Creating new task");
                 taskProxy.CurrentTask = new Task(project.Name);
                 try
                 {
@@ -153,10 +155,10 @@ namespace SlimTimer.control
                 catch (Exception exception)
                 {
                     statusProxy.StatusText = ("Error creating task for " + settingsProxy.Username);
-                    //log("exception.Source : " + exception.Source);
-                    //log("exception.StackTrace : " + exception.StackTrace);
-                    //log("exception.Message : " + exception.Message);
-                    //log("exception.Data : " + exception.Data);
+                    Console.WriteLine("exception.Source : " + exception.Source);
+                    Console.WriteLine("exception.StackTrace : " + exception.StackTrace);
+                    Console.WriteLine("exception.Message : " + exception.Message);
+                    Console.WriteLine("exception.Data : " + exception.Data);
                     Console.WriteLine("Error creating task for " + settingsProxy.Username + " : " + exception.Message);
                 }
             }

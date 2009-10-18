@@ -12,9 +12,9 @@ namespace SlimTimer.model
     class TimerProxy : Proxy
     {
         public static new String NAME = "TimerProxy";
-        public static String CHANGE_TIMER = "CHANGE_TIMER";
-        public static String CHANGE_SUBMIT_TIMER = "CHANGE_SUBMIT_TIMER";
-        public static String CHANGE_TIMEOUT_TIMER = "CHANGE_TIMEOUT_TIMER";
+        public const String CHANGE_TIMER = "CHANGE_TIMER";
+        public const String CHANGE_SUBMIT_TIMER = "CHANGE_SUBMIT_TIMER";
+        public const String CHANGE_TIMEOUT_TIMER = "CHANGE_TIMEOUT_TIMER";
         public TimerProxy()
             : base(NAME)
         {
@@ -95,6 +95,7 @@ namespace SlimTimer.model
 
         void onTimeoutTimerTick(object sender, EventArgs e)
         {
+            Console.WriteLine("onTimeoutTimerTick");
             StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
             //log("onTimeoutTimerTick");
             if (!statusProxy.LoggedIn) return;
@@ -107,6 +108,7 @@ namespace SlimTimer.model
         }
         void onSubmitTimerTick(object sender, EventArgs e)
         {
+            Console.WriteLine("onSubmitTimerTick");
             StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
             //log("onSubmitTimerTick");
             if (!statusProxy.LoggedIn) return;
@@ -114,14 +116,17 @@ namespace SlimTimer.model
         }
         void onTimerTick(object sender, EventArgs e)
         {
+            //Console.WriteLine("onTimerTick");
             StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
             TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
             TimeEntry timeEntry = taskProxy.CurrentTimeEntry;
+            //Console.WriteLine("statusProxy.LoggedIn " + statusProxy.LoggedIn);
+            //Console.WriteLine("timeEntry " + timeEntry);
             if (!statusProxy.LoggedIn) return;
             if (timeEntry == null) return;
             timeEntry.EndTime = DateTime.Now;
             TimeSpan duration = DateTime.Now.Subtract(timeEntry.StartTime);
-            ////log("duration = " + duration);
+            //Console.WriteLine("duration = " + duration);
             statusProxy.Time = (duration);
         }
 

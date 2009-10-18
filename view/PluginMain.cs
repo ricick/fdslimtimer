@@ -21,11 +21,13 @@ namespace SlimTimer.view
 {
 	public class PluginMain : IPlugin
 	{
+        public delegate void ChangeFileEventHandler (object sender, ChangeFileEventArgs e);
+        public delegate void ChangeProjectEventHandler(object sender, ChangeProjectEventArgs e);
         //event delegates
         public event EventHandler dispose;
         public event EventHandler interaction;
-        public event EventHandler changeFile;
-        public event EventHandler changeProject;
+        public event ChangeFileEventHandler changeFile;
+        public event ChangeProjectEventHandler changeProject;
 
         private String pluginName = "SlimTimer";
         private String pluginGuid = "f80042e0-7525-11de-800b-0002a5d5c51b";
@@ -222,7 +224,7 @@ namespace SlimTimer.view
 
         #endregion
 	}
-    class ChangeFileEventArgs : EventArgs
+    public class ChangeFileEventArgs : EventArgs
     {
         public ITabbedDocument file;
         public ChangeFileEventArgs(ITabbedDocument file)
@@ -231,7 +233,7 @@ namespace SlimTimer.view
             this.file = file;
         }
     }
-    class ChangeProjectEventArgs : EventArgs
+    public class ChangeProjectEventArgs : EventArgs
     {
         public IProject project;
         public ChangeProjectEventArgs(IProject project)

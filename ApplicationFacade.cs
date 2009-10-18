@@ -20,6 +20,8 @@ namespace SlimTimer
         public static String RESET_TIMEOUT = "RESET_TIMEOUT";
         public static String CLEANUP_DUPLICATES = "CLEANUP_DUPLICATES";
         public static String NEW_TIME_ENTRY = "NEW_TIME_ENTRY";
+        public static String CHANGE_FILE = "CHANGE_FILE";
+        public static String CHANGE_PROJECT = "CHANGE_PROJECT";
         protected static ApplicationFacade instance;
         protected ApplicationFacade() { }
 
@@ -48,6 +50,8 @@ namespace SlimTimer
             RegisterCommand(RESET_TIMEOUT, typeof(ResetTimeoutCommand));
             RegisterCommand(CLEANUP_DUPLICATES, typeof(CleanDuplicatesCommand));
             RegisterCommand(NEW_TIME_ENTRY, typeof(NewTimeEntryCommand));
+            RegisterCommand(CHANGE_FILE, typeof(ChangeFileCommand));
+            RegisterCommand(CHANGE_PROJECT, typeof(ChangeProjectCommand));
         }
     }
 }

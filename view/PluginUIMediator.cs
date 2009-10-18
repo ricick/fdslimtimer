@@ -34,7 +34,7 @@ namespace SlimTimer.view
         }
         public override IList<string> ListNotificationInterests()
         {
-            return new List<string>(new string[] { StatusProxy.CHANGE_STATUS_TEXT, StatusProxy.CHANGE_PROJECT_TEXT});
+            return new List<string>(new string[] { StatusProxy.CHANGE_STATUS_TEXT, StatusProxy.CHANGE_PROJECT_TEXT, StatusProxy.CHANGE_TIME });
         }
         public override void HandleNotification(PureMVC.Interfaces.INotification notification)
         {
@@ -47,6 +47,10 @@ namespace SlimTimer.view
                     break;
                 case StatusProxy.CHANGE_PROJECT_TEXT:
                     pluginUI.setProjectText(notification.Body as String);
+                    break;
+                case StatusProxy.CHANGE_TIME:
+                    //Console.WriteLine("HandleNotification TimerProxy.CHANGE_TIMER");
+                    pluginUI.setTime((TimeSpan)notification.Body);
                     break;
             }
         }
