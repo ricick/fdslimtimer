@@ -175,6 +175,8 @@ namespace SlimTimer.model
                 this.settingObject = (SlimtimerSettings)obj;
             }
             settingObject.Changed += SettingChanged;
+            //settingObject.Username = "ricick@gmail.com";
+            //settingObject.Password = "doogle";
             Username = settingObject.Username;
             Console.WriteLine("Username " + Username);
             Password = settingObject.Password;
@@ -186,10 +188,12 @@ namespace SlimTimer.model
             AskIgnoreProject = settingObject.AskIgnoreProject;
             TrackedProjects = settingObject.TrackedProjects;
             IgnoredProjects = settingObject.IgnoredProjects;
+            //this.SaveSettings();
         }
         public void SaveSettings()
         {
-            settingObject.Changed -= SettingChanged;
+            Console.WriteLine("SaveSettings in " + this.settingFilename);
+            //settingObject.Changed -= SettingChanged;
             ObjectSerializer.Serialize(this.settingFilename, this.settingObject);
         }
         private void SettingChanged(string setting)

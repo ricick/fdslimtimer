@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCompletion", "..\FD3\Exte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASClassWizard", "..\FD3\External\Plugins\ASClassWizard\ASClassWizard.csproj", "{A2C159C1-7D21-4483-AEB1-38D9FDC4C7F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePlugin", "..\FD3\External\Plugins\SamplePlugin\SamplePlugin.csproj", "{4F0B5346-DC71-424C-975A-3C025D5EDC10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,14 @@ Global
 		{A2C159C1-7D21-4483-AEB1-38D9FDC4C7F3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2C159C1-7D21-4483-AEB1-38D9FDC4C7F3}.Release|x86.ActiveCfg = Release|x86
 		{A2C159C1-7D21-4483-AEB1-38D9FDC4C7F3}.Release|x86.Build.0 = Release|x86
+		{4F0B5346-DC71-424C-975A-3C025D5EDC10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F0B5346-DC71-424C-975A-3C025D5EDC10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F0B5346-DC71-424C-975A-3C025D5EDC10}.Debug|x86.ActiveCfg = Debug|x86
+		{4F0B5346-DC71-424C-975A-3C025D5EDC10}.Debug|x86.Build.0 = Debug|x86
+		{4F0B5346-DC71-424C-975A-3C025D5EDC10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F0B5346-DC71-424C-975A-3C025D5EDC10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F0B5346-DC71-424C-975A-3C025D5EDC10}.Release|x86.ActiveCfg = Release|x86
+		{4F0B5346-DC71-424C-975A-3C025D5EDC10}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -49,7 +49,7 @@ namespace Inikus.SlimTimer
         private string _UserID;
         private string _Error;
         private int _BufferSize = 1024;
-        private const string BASE_URL = "http://www.slimtimer.com";
+        private const string BASE_URL = "http://slimtimer.com";
         private CookieCollection _CC;
 
         #endregion
