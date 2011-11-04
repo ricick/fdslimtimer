@@ -4,8 +4,8 @@ using System.Text;
 using PureMVC.Patterns;
 using System.IO;
 using SlimTimer.vo;
-using PluginCore.Utilities;
 using PluginCore.Helpers;
+using PluginCore.Utilities;
 
 namespace SlimTimer.model
 {
@@ -168,15 +168,17 @@ namespace SlimTimer.model
         {
             Console.WriteLine("LoadSettings");
             this.settingObject = new SlimtimerSettings();
+            /*
             if (!File.Exists(this.settingFilename)) this.SaveSettings();
             else
             {
                 Object obj = ObjectSerializer.Deserialize(this.settingFilename, this.settingObject);
                 this.settingObject = (SlimtimerSettings)obj;
             }
+            */
             settingObject.Changed += SettingChanged;
-            //settingObject.Username = "ricick@gmail.com";
-            //settingObject.Password = "doogle";
+            settingObject.Username = "ricick@gmail.com";
+            settingObject.Password = "doogle";
             Username = settingObject.Username;
             Console.WriteLine("Username " + Username);
             Password = settingObject.Password;
@@ -193,7 +195,7 @@ namespace SlimTimer.model
         public void SaveSettings()
         {
             Console.WriteLine("SaveSettings in " + this.settingFilename);
-            //settingObject.Changed -= SettingChanged;
+            settingObject.Changed -= SettingChanged;
             ObjectSerializer.Serialize(this.settingFilename, this.settingObject);
         }
         private void SettingChanged(string setting)

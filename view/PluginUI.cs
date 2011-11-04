@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
-using WeifenLuo.WinFormsUI;
-using PluginCore;
 using Inikus.SlimTimer;
 using System.Collections.ObjectModel;
 

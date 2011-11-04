@@ -3,19 +3,18 @@ using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel;
-using WeifenLuo.WinFormsUI.Docking;
 using SlimTimer.Resources;
-using PluginCore.Localization;
-using PluginCore.Utilities;
-using PluginCore.Managers;
-using PluginCore.Helpers;
-using PluginCore;
 using Inikus.SlimTimer;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Collections;
+using WeifenLuo.WinFormsUI.Docking;
 using SlimTimer.view;
 using SlimTimer.vo;
+using PluginCore;
+using PluginCore.Helpers;
+using PluginCore.Managers;
+using PluginCore.Localization;
 
 namespace SlimTimer.view
 {
@@ -158,6 +157,7 @@ namespace SlimTimer.view
             if (!Directory.Exists(dataPath)) Directory.CreateDirectory(dataPath);
             this.settingFilename = Path.Combine(dataPath, "Settings.fdb");
             this.pluginImage = PluginBase.MainForm.FindImage("123");
+            this.settingObject = null;
         }
         /// <summary>
         /// Startup PUREMVC app
@@ -223,7 +223,13 @@ namespace SlimTimer.view
         }
 
         #endregion
-	}
+
+
+        public int Api
+        {
+            get { return 1; }
+        }
+    }
     public class ChangeFileEventArgs : EventArgs
     {
         public ITabbedDocument file;

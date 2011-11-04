@@ -4,7 +4,6 @@ using System.Resources;
 using System.Reflection;
 using System.Collections.Generic;
 using PluginCore.Localization;
-using PluginCore;
 
 namespace SlimTimer.Resources
 {

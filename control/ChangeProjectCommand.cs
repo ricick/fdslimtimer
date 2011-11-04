@@ -4,9 +4,9 @@ using System.Text;
 using PureMVC.Patterns;
 using PureMVC.Interfaces;
 using SlimTimer.model;
-using PluginCore;
 using Inikus.SlimTimer;
 using System.Windows.Forms;
+using PluginCore;
 
 namespace SlimTimer.control
 {
