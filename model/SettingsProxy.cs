@@ -12,18 +12,19 @@ namespace SlimTimer.model
     class SettingsProxy : Proxy
     {
         public static new String NAME = "SettingsProxy";
-        public static String CHANGE_USERNAME = "CHANGE_USERNAME";
-        public static String CHANGE_PASSWORD = "CHANGE_PASSWORD";
-        public static String CHANGE_IDLE_TIMEOUT = "CHANGE_IDLE_TIMEOUT";
-        public static String CHANGE_FILE_COMMENTS = "CHANGE_FILE_COMMENTS";
-        public static String CHANGE_MINIMUM_TIME = "CHANGE_MINIMUM_TIME";
-        public static String CHANGE_TIMEOUT_DURATION = "CHANGE_TIMEOUT_DURATION";
-        public static String CHANGE_AUTO_SUBMIT_DURATION = "CHANGE_AUTO_SUBMIT_DURATION";
-        public static String CHANGE_CLEANUP_DUPLICATES = "CHANGE_CLEANUP_DUPLICATES";
-        public static String CHANGE_ASK_IGNORE_PROJECT = "CHANGE_ASK_IGNORE_PROJECT";
-        public static String CHANGE_TRACKED_PROJECTS = "CHANGE_TRACKED_PROJECTS";
-        public static String CHANGE_IGNORED_PROJECTS = "CHANGE_IGNORED_PROJECTS";
-        public static String CHANGE_PROJECT_MAP = "CHANGE_PROJECT_MAP";
+        public const String CHANGE_USERNAME = "CHANGE_USERNAME";
+        public const String CHANGE_PASSWORD = "CHANGE_PASSWORD";
+        public const String CHANGE_IDLE_TIMEOUT = "CHANGE_IDLE_TIMEOUT";
+        public const String CHANGE_FILE_COMMENTS = "CHANGE_FILE_COMMENTS";
+        public const String CHANGE_MINIMUM_TIME = "CHANGE_MINIMUM_TIME";
+        public const String CHANGE_TIMEOUT_DURATION = "CHANGE_TIMEOUT_DURATION";
+        public const String CHANGE_AUTO_SUBMIT_DURATION = "CHANGE_AUTO_SUBMIT_DURATION";
+        public const String CHANGE_CLEANUP_DUPLICATES = "CHANGE_CLEANUP_DUPLICATES";
+        public const String CHANGE_ASK_IGNORE_PROJECT = "CHANGE_ASK_IGNORE_PROJECT";
+        public const String CHANGE_TRACKED_PROJECTS = "CHANGE_TRACKED_PROJECTS";
+        public const String CHANGE_IGNORED_PROJECTS = "CHANGE_IGNORED_PROJECTS";
+        public const String CHANGE_PROJECT_MAP = "CHANGE_PROJECT_MAP";
+        public const String CHANGE_SETTING_OBJECT = "CHANGE_SETTING_OBJECT";
         private String username = "";
 
         public String Username
@@ -157,6 +158,16 @@ namespace SlimTimer.model
         }
         private String settingFilename;
         private SlimtimerSettings settingObject;
+        public SlimtimerSettings SettingObject
+        {
+            get { return settingObject; }
+            set
+            {
+                settingObject = value;
+                SendNotification(CHANGE_SETTING_OBJECT, value);
+            }
+        }
+
         public SettingsProxy()
             : base(NAME)
         {
@@ -167,29 +178,27 @@ namespace SlimTimer.model
         public void LoadSettings()
         {
             Console.WriteLine("LoadSettings");
-            this.settingObject = new SlimtimerSettings();
-            /*
+            this.SettingObject = new SlimtimerSettings();
             if (!File.Exists(this.settingFilename)) this.SaveSettings();
             else
             {
                 Object obj = ObjectSerializer.Deserialize(this.settingFilename, this.settingObject);
-                this.settingObject = (SlimtimerSettings)obj;
+                this.SettingObject = (SlimtimerSettings)obj;
             }
+            /*
             */
-            settingObject.Changed += SettingChanged;
-            settingObject.Username = "ricick@gmail.com";
-            settingObject.Password = "doogle";
+            SettingObject.Changed += SettingChanged;
             Username = settingObject.Username;
             Console.WriteLine("Username " + Username);
             Password = settingObject.Password;
             Console.WriteLine("Password " + Password);
-            IdleTimeout = settingObject.IdleTimeout;
-            FileComments = settingObject.FileComments;
-            MinimumTime = settingObject.MinimumTime;
-            CleanupDuplicates = settingObject.CleanupDuplicates;
-            AskIgnoreProject = settingObject.AskIgnoreProject;
-            TrackedProjects = settingObject.TrackedProjects;
-            IgnoredProjects = settingObject.IgnoredProjects;
+            IdleTimeout = SettingObject.IdleTimeout;
+            FileComments = SettingObject.FileComments;
+            MinimumTime = SettingObject.MinimumTime;
+            CleanupDuplicates = SettingObject.CleanupDuplicates;
+            AskIgnoreProject = SettingObject.AskIgnoreProject;
+            TrackedProjects = SettingObject.TrackedProjects;
+            IgnoredProjects = SettingObject.IgnoredProjects;
             //this.SaveSettings();
         }
         public void SaveSettings()

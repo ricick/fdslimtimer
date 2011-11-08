@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using PureMVC.Patterns;
+using SlimTimer.model;
+using SlimTimer.vo;
 
 namespace SlimTimer.view
 {
@@ -37,7 +39,18 @@ namespace SlimTimer.view
         }
         public override IList<string> ListNotificationInterests()
         {
-            return base.ListNotificationInterests();
+            return new List<string>(new string[] { SettingsProxy.CHANGE_SETTING_OBJECT });
+        }
+        public override void HandleNotification(PureMVC.Interfaces.INotification notification)
+        {
+            base.HandleNotification(notification);
+
+            switch (notification.Name)
+            {
+                case SettingsProxy.CHANGE_SETTING_OBJECT:
+                    pluginMain.setSettingObject(notification.Body as SlimtimerSettings);
+                    break;
+            }
         }
         private PluginMain pluginMain{
             get

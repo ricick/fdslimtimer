@@ -157,7 +157,6 @@ namespace SlimTimer.view
             if (!Directory.Exists(dataPath)) Directory.CreateDirectory(dataPath);
             this.settingFilename = Path.Combine(dataPath, "Settings.fdb");
             this.pluginImage = PluginBase.MainForm.FindImage("123");
-            this.settingObject = null;
         }
         /// <summary>
         /// Startup PUREMVC app
@@ -228,6 +227,11 @@ namespace SlimTimer.view
         public int Api
         {
             get { return 1; }
+        }
+
+        internal void setSettingObject(SlimtimerSettings slimtimerSettings)
+        {
+            settingObject = slimtimerSettings;
         }
     }
     public class ChangeFileEventArgs : EventArgs

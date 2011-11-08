@@ -34,6 +34,8 @@ namespace SlimTimer.view
             buttonPause.Visible = false;
 			this.pluginMain = pluginMain;
             this.buttonPause.Click += new EventHandler(buttonPause_Click);
+            buttonNoTimeout.Visible = false;
+            comboBoxProjects.Visible = false;
 		}
 
         void buttonPause_Click(object sender, EventArgs e)
@@ -95,10 +97,10 @@ namespace SlimTimer.view
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.buttonPause = new System.Windows.Forms.Button();
-            this.buttonNoTimeout = new System.Windows.Forms.Button();
-            this.comboBoxProjects = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxProjects = new System.Windows.Forms.ComboBox();
+            this.buttonNoTimeout = new System.Windows.Forms.Button();
+            this.buttonPause = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -188,23 +190,15 @@ namespace SlimTimer.view
             this.label6.Text = "Time:";
             this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // buttonPause
+            // label1
             // 
-            this.buttonPause.Location = new System.Drawing.Point(64, 90);
-            this.buttonPause.Name = "buttonPause";
-            this.buttonPause.Size = new System.Drawing.Size(75, 21);
-            this.buttonPause.TabIndex = 6;
-            this.buttonPause.Text = "button1";
-            this.buttonPause.UseVisualStyleBackColor = true;
-            // 
-            // buttonNoTimeout
-            // 
-            this.buttonNoTimeout.Location = new System.Drawing.Point(64, 117);
-            this.buttonNoTimeout.Name = "buttonNoTimeout";
-            this.buttonNoTimeout.Size = new System.Drawing.Size(75, 23);
-            this.buttonNoTimeout.TabIndex = 7;
-            this.buttonNoTimeout.Text = "button1";
-            this.buttonNoTimeout.UseVisualStyleBackColor = true;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 60);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Track as";
+            this.label1.Visible = false;
             // 
             // comboBoxProjects
             // 
@@ -216,15 +210,27 @@ namespace SlimTimer.view
             this.comboBoxProjects.Size = new System.Drawing.Size(191, 21);
             this.comboBoxProjects.TabIndex = 8;
             this.comboBoxProjects.ValueMember = "Name";
+            this.comboBoxProjects.Visible = false;
             // 
-            // label1
+            // buttonNoTimeout
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 60);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Track as";
+            this.buttonNoTimeout.Location = new System.Drawing.Point(64, 117);
+            this.buttonNoTimeout.Name = "buttonNoTimeout";
+            this.buttonNoTimeout.Size = new System.Drawing.Size(75, 23);
+            this.buttonNoTimeout.TabIndex = 7;
+            this.buttonNoTimeout.Text = "button1";
+            this.buttonNoTimeout.UseVisualStyleBackColor = true;
+            this.buttonNoTimeout.Visible = false;
+            // 
+            // buttonPause
+            // 
+            this.buttonPause.Location = new System.Drawing.Point(64, 90);
+            this.buttonPause.Name = "buttonPause";
+            this.buttonPause.Size = new System.Drawing.Size(75, 21);
+            this.buttonPause.TabIndex = 6;
+            this.buttonPause.Text = "button1";
+            this.buttonPause.UseVisualStyleBackColor = true;
+            this.buttonPause.Visible = false;
             // 
             // PluginUI
             // 
