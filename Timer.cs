@@ -261,27 +261,51 @@ namespace Inikus.SlimTimer
         {
             if (!PrepareRequestCall())
                 return null;
-
-            string url = GetBaseURL() + "/tasks" + GetURLParams() +
-                "&filter[show_completed]=" + completedTasks.ToString().ToLower() + "&filter[role]=";
-
-            if ((filter & TaskFilters.Coworker) > 0)
+            Collection<Task> tasks = new Collection<Task>();
+            Boolean tasksPending = true;
+            int offset = 0;
+            while (tasksPending)
             {
-                url += TaskFilters.Coworker.ToString().ToLower() + ",";
-            }
-            if ((filter & TaskFilters.Owner) > 0)
-            {
-                url += TaskFilters.Owner.ToString().ToLower() + ",";
-            }
-            if ((filter & TaskFilters.Reporter) > 0)
-            {
-                url += TaskFilters.Reporter.ToString().ToLower();
-            }
-            Uri uri = new Uri(url.TrimEnd(','));
-            string Response = GetHttpPage(uri);
+                string url = GetBaseURL() + "/tasks" + GetURLParams() +
+                    "&offset="+offset+"&filter[show_completed]=" + completedTasks.ToString().ToLower() + "&filter[role]=";
 
-            return ParseTasks(Response);
+                if ((filter & TaskFilters.Coworker) > 0)
+                {
+                    url += TaskFilters.Coworker.ToString().ToLower() + ",";
+                }
+                if ((filter & TaskFilters.Owner) > 0)
+                {
+                    url += TaskFilters.Owner.ToString().ToLower() + ",";
+                }
+                if ((filter & TaskFilters.Reporter) > 0)
+                {
+                    url += TaskFilters.Reporter.ToString().ToLower();
+                }
+                Uri uri = new Uri(url.TrimEnd(','));
+                string Response = GetHttpPage(uri);
+                Collection<Task> tempTasks = ParseTasks(Response);
+                Console.WriteLine("got " + tempTasks.Count + " tasks");
+                if (tempTasks.Count < 50)
+                {
+                    tasksPending = false;
+                }
+                else
+                {
+                    offset += 50;
+                }
+                if (tasks == null)
+                {
+                    tasks = tempTasks;
+                }
+                else
+                {
+                    foreach (Task task in tempTasks)
+                        tasks.Add(task);
+                }
+            }
+            Console.WriteLine("got total of " + tasks.Count + " tasks");
 
+            return tasks;
         }
 
         /// <summary>
@@ -489,7 +513,27 @@ namespace Inikus.SlimTimer
             // Build the URL string
             string url = GetBaseURL() + "/time_entries" + GetURLParams() +
                 "&filter[range_start]=" + rangeStart.ToString("s", CultureInfo.InvariantCulture) + "&filter[range_end]=" + rangeEnd.ToString("s", CultureInfo.InvariantCulture);
+            
+            string Response = GetHttpPage(new Uri(url));
 
+            return ParseTimeEntries(Response);
+        }
+        /// <summary>
+        /// Retrieves all Time Entries from SlimTimer that fall between the passed in date range for the specified task
+        /// </summary>
+        /// <param name="taskId">Task to get entries for</param>
+        /// <param name="rangeStart">First date to search for Time Entries</param>
+        /// <param name="rangeEnd">Last date to search for Time Entries</param>
+        /// <returns>List of TimeEntry objects retrieved from SlimTimer</returns>
+        public Collection<TimeEntry> ListTaskTimeEntries(String taskId, DateTime rangeStart, DateTime rangeEnd)
+        {
+            if (!PrepareRequestCall())
+                return null;
+
+            // Build the URL string
+            string url = GetBaseURL() + "/tasks/" + taskId + "/time_entries" + GetURLParams() +
+                "&range_start=" + rangeStart.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + "&range_end=" + rangeEnd.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            Console.WriteLine("getting entries from " + url);
             string Response = GetHttpPage(new Uri(url));
 
             return ParseTimeEntries(Response);

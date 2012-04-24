@@ -38,16 +38,35 @@ namespace SlimTimer.control
                 {
                     //move entries to original and delete duplicate
                     //api;
-                    //log("Duplicate project found :" + checkTask.Name + " hours = " + checkTask.Hours);
-                    Collection<TimeEntry> potentialEntries = apiProxy.Api.ListTimeEntries(checkTask.CreatedTime, checkTask.UpdatedTime);
+                    if (checkTask.Id == originalTask.Id)
+                    {
+
+                        Console.WriteLine("Not really a duplicate project found :" + checkTask.Name);
+                        continue;
+                    }
+                    Console.WriteLine("Duplicate project found :" + checkTask.Name + " hours = " + checkTask.Hours);
+                    Collection<TimeEntry> potentialEntries = apiProxy.Api.ListTaskTimeEntries(checkTask.Id, checkTask.CreatedTime, checkTask.UpdatedTime);
+                    //Collection<TimeEntry> potentialEntries = apiProxy.Api.ListTaskTimeEntries(checkTask.Id, new DateTime(0), new DateTime());
+                    if (potentialEntries.Count == 0 && checkTask.Hours>0)
+                    {
+
+                        Console.WriteLine("Problem getting entries for " + checkTask.Name);
+                        continue;
+                    }
+                    DateTime startTime = new DateTime(0);
                     foreach (TimeEntry checkEntry in potentialEntries)
                     {
                         if (checkEntry.RelatedTask.Id == checkTask.Id)
                         {
-                            //log("Entry in duplicate project found :" + checkEntry.StartTime);
+                            Console.WriteLine("Entry in duplicate project found :" + checkEntry.StartTime);
                             //set the timeentry to be associated with the original task and save it
+                            if (checkEntry.StartTime.CompareTo(startTime) == 0)
+                            {
+                                Console.WriteLine("Duplicate timeentry ignoring :" + checkEntry.StartTime);
+                            }
                             checkEntry.RelatedTask = originalTask;
                             apiProxy.Api.UpdateTimeEntry(checkEntry);
+                            startTime = checkEntry.StartTime;
                         }
                     }
                     //delete the task

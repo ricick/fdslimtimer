@@ -12,6 +12,7 @@ namespace SlimTimer.control
     {
         public override void Execute(INotification notification)
         {
+            Console.WriteLine("Loading tasks");
             APIProxy apiProxy = Facade.RetrieveProxy(APIProxy.NAME) as APIProxy;
             SettingsProxy settingsProxy = Facade.RetrieveProxy(SettingsProxy.NAME) as SettingsProxy;
             StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
