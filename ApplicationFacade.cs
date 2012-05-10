@@ -19,6 +19,7 @@ namespace SlimTimer
         public static String SELECT_TRACKING = "SELECT_TRACKING";
         public static String RESET_TIMEOUT = "RESET_TIMEOUT";
         public static String CLEANUP_DUPLICATES = "CLEANUP_DUPLICATES";
+        public static String CLEANUP_OVERLAPS = "CLEANUP_OVERLAPS";
         public static String NEW_TIME_ENTRY = "NEW_TIME_ENTRY";
         public static String CHANGE_FILE = "CHANGE_FILE";
         public static String CHANGE_PROJECT = "CHANGE_PROJECT";
@@ -49,6 +50,7 @@ namespace SlimTimer
             RegisterCommand(SELECT_TRACKING, typeof(SelectTracking));
             RegisterCommand(RESET_TIMEOUT, typeof(ResetTimeoutCommand));
             RegisterCommand(CLEANUP_DUPLICATES, typeof(CleanDuplicatesCommand));
+            RegisterCommand(CLEANUP_OVERLAPS, typeof(CleanOverlapsCommand));
             RegisterCommand(NEW_TIME_ENTRY, typeof(NewTimeEntryCommand));
             RegisterCommand(CHANGE_FILE, typeof(ChangeFileCommand));
             RegisterCommand(CHANGE_PROJECT, typeof(ChangeProjectCommand));

@@ -20,6 +20,7 @@ namespace SlimTimer.model
         public const String CHANGE_TIMEOUT_DURATION = "CHANGE_TIMEOUT_DURATION";
         public const String CHANGE_AUTO_SUBMIT_DURATION = "CHANGE_AUTO_SUBMIT_DURATION";
         public const String CHANGE_CLEANUP_DUPLICATES = "CHANGE_CLEANUP_DUPLICATES";
+        public const String CHANGE_CLEANUP_OVERLAPS = "CHANGE_CLEANUP_OVERLAPS";
         public const String CHANGE_ASK_IGNORE_PROJECT = "CHANGE_ASK_IGNORE_PROJECT";
         public const String CHANGE_TRACKED_PROJECTS = "CHANGE_TRACKED_PROJECTS";
         public const String CHANGE_IGNORED_PROJECTS = "CHANGE_IGNORED_PROJECTS";
@@ -112,6 +113,18 @@ namespace SlimTimer.model
                 SendNotification(CHANGE_CLEANUP_DUPLICATES, value);
             }
         }
+        private bool cleanupOverlaps = false;
+
+        public bool CleanupOverlaps
+        {
+            get { return cleanupOverlaps; }
+            set
+            {
+                cleanupOverlaps = value;
+                SendNotification(CHANGE_CLEANUP_OVERLAPS, value);
+            }
+        }
+        
         private bool askIgnoreProject = true;
 
         public bool AskIgnoreProject

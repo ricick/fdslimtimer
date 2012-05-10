@@ -5,6 +5,7 @@ using PureMVC.Patterns;
 using PureMVC.Interfaces;
 using SlimTimer.model;
 using Inikus.SlimTimer;
+using System.Threading;
 
 namespace SlimTimer.control
 {
@@ -13,48 +14,55 @@ namespace SlimTimer.control
         public override void Execute(INotification notification)
         {
             base.Execute(notification);
+            Thread worker = new Thread(DoSaveTimeEntry);
+            worker.IsBackground = true;
+            worker.Start();
+
+        }
+        private void DoSaveTimeEntry()
+        {
             APIProxy apiProxy = Facade.RetrieveProxy(APIProxy.NAME) as APIProxy;
             TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
             SettingsProxy settingsProxy = Facade.RetrieveProxy(SettingsProxy.NAME) as SettingsProxy;
             StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
 
             TimeEntry timeEntry = taskProxy.CurrentTimeEntry;
-            //log("submitTimeEntry");
+            Console.WriteLine("submitTimeEntry " + timeEntry);
             if (!statusProxy.LoggedIn)
             {
-                //log("notlogged in");
+                Console.WriteLine("notlogged in");
                 return;
             }
             if (timeEntry == null)
             {
-                //log("no time entry");
+                Console.WriteLine("no time entry");
                 return;
             }
             if (timeEntry.RelatedTask == null || timeEntry.RelatedTask.Id == null || timeEntry.RelatedTask.Id.Length == 0)
             {
-                //log("no task to submit to");
+                Console.WriteLine("no task to submit to");
                 return;
             }
             DateTime startTime = timeEntry.StartTime;
             timeEntry.EndTime = DateTime.Now;
             timeEntry.Comments = taskProxy.Comments;
-            //log("timeEntry.EndTime = " + timeEntry.EndTime);
+            //Console.WriteLine("timeEntry.EndTime = " + timeEntry.EndTime);
             TimeSpan duration = timeEntry.EndTime.Subtract(timeEntry.StartTime);
-            //log("timeEntry.StartTime = " + timeEntry.StartTime);
-            //log("duration = " + duration);
+            //Console.WriteLine("timeEntry.StartTime = " + timeEntry.StartTime);
+            //Console.WriteLine("duration = " + duration);
             //int minimumTime = minimumTime;
             if (settingsProxy.MinimumTime < 1) settingsProxy.MinimumTime = 1;
             timeEntry.Duration = Convert.ToInt32(Math.Floor(duration.TotalSeconds));
             if (duration.TotalSeconds < settingsProxy.MinimumTime)
             {
-                //log("not enough seconds to submit");
+                Console.WriteLine("not enough seconds to submit");
                 return;
             }
             try
             {
                 timeEntry = apiProxy.Api.UpdateTimeEntry(timeEntry);
                 //replace timeentry with result
-                //log("timeEntry submitted " + timeEntry.Id);
+                //Console.WriteLine("timeEntry submitted " + timeEntry.Id);
             }
             catch (Exception exception)
             {
@@ -67,6 +75,7 @@ namespace SlimTimer.control
             }
             //set start time back to cached value (submitting returns server time)
             timeEntry.StartTime = startTime;
+            taskProxy.CurrentTimeEntry = timeEntry;
         }
 
     }

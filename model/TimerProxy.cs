@@ -22,10 +22,14 @@ namespace SlimTimer.model
             timer = new Timer();
             timer.Interval = 1000;
             timer.Tick += new EventHandler(onTimerTick);
+            timer.Start();
             submitTimer = new Timer();
             submitTimer.Interval = settingsProxy.AutoSubmitDuration;
             submitTimer.Tick += new EventHandler(onSubmitTimerTick);
             submitTimer.Start();
+            Console.WriteLine("created submit timer");
+            Console.WriteLine(submitTimer);
+            Console.WriteLine(submitTimer.Enabled);
             settingsProxy.TimeoutDuration = settingsProxy.IdleTimeout * 60000;
             if (settingsProxy.TimeoutDuration == 0) settingsProxy.TimeoutDuration = 300000;
             ////log("timeoutDuration " + timeoutDuration);
@@ -71,6 +75,7 @@ namespace SlimTimer.model
 
         public void ResetTimeOut()
         {
+            //Console.WriteLine("ResetTimeOut");
             StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
             SettingsProxy settingsProxy = Facade.RetrieveProxy(SettingsProxy.NAME) as SettingsProxy;
             if (statusProxy.Idle)
@@ -100,6 +105,7 @@ namespace SlimTimer.model
             //log("onTimeoutTimerTick");
             if (!statusProxy.LoggedIn) return;
             SendNotification(ApplicationFacade.SAVE_TIME_ENTRY);
+            Console.WriteLine("stopping timers");
             timeoutTimer.Stop();
             submitTimer.Stop();
             timer.Stop();
@@ -116,11 +122,11 @@ namespace SlimTimer.model
         }
         void onTimerTick(object sender, EventArgs e)
         {
-            //Console.WriteLine("onTimerTick");
+           // Console.WriteLine("onTimerTick");
             StatusProxy statusProxy = Facade.RetrieveProxy(StatusProxy.NAME) as StatusProxy;
             TaskProxy taskProxy = Facade.RetrieveProxy(TaskProxy.NAME) as TaskProxy;
             TimeEntry timeEntry = taskProxy.CurrentTimeEntry;
-            //Console.WriteLine("statusProxy.LoggedIn " + statusProxy.LoggedIn);
+           // Console.WriteLine("statusProxy.LoggedIn " + statusProxy.LoggedIn);
             //Console.WriteLine("timeEntry " + timeEntry);
             if (!statusProxy.LoggedIn) return;
             if (timeEntry == null) return;

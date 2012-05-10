@@ -87,6 +87,7 @@
     <Compile Include="control\ApplicationStartupCommand.cs" />
     <Compile Include="control\ChangeFileCommand.cs" />
     <Compile Include="control\ChangeProjectCommand.cs" />
+    <Compile Include="control\CleanOverlapsCommand.cs" />
     <Compile Include="control\NewTimeEntryCommand.cs" />
     <Compile Include="control\ResetTimeoutCommand.cs" />
     <Compile Include="control\SetCurrentTaskCommand.cs" />

@@ -21,10 +21,12 @@ namespace SlimTimer.control
             String password = settingsProxy.Password;
             statusProxy.LoggedIn = false;
             //stop all timers
+            /*
             timerProxy.SubmitTimer.Stop();
             timerProxy.Timer.Stop();
-            statusProxy.Time = (new TimeSpan(0));
             timerProxy.TimeoutTimer.Stop();
+             */
+            statusProxy.Time = (new TimeSpan(0));
             if (username == "Username" || username == "username" || username == "" || password == "")
             {
                 Console.WriteLine("No user or pass");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using PureMVC.Patterns;
 using SlimTimer.model;
+using System.Windows.Forms;
 
 namespace SlimTimer.view
 {
@@ -39,18 +40,26 @@ namespace SlimTimer.view
         public override void HandleNotification(PureMVC.Interfaces.INotification notification)
         {
             base.HandleNotification(notification);
-            
             switch (notification.Name)
             {
                 case StatusProxy.CHANGE_STATUS_TEXT:
-                    pluginUI.setStatusText(notification.Body as String);
+                    pluginUI.Invoke((MethodInvoker)delegate
+                    {
+                        pluginUI.setStatusText(notification.Body as String);
+                    });
                     break;
                 case StatusProxy.CHANGE_PROJECT_TEXT:
-                    pluginUI.setProjectText(notification.Body as String);
+                    pluginUI.Invoke((MethodInvoker)delegate
+                    {
+                        pluginUI.setProjectText(notification.Body as String);
+                    });
                     break;
                 case StatusProxy.CHANGE_TIME:
                     //Console.WriteLine("HandleNotification TimerProxy.CHANGE_TIMER");
-                    pluginUI.setTime((TimeSpan)notification.Body);
+                    pluginUI.Invoke((MethodInvoker)delegate
+                    {
+                        pluginUI.setTime((TimeSpan)notification.Body);
+                    });
                     break;
             }
         }

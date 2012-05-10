@@ -22,7 +22,7 @@ namespace SlimTimer.control
             Console.WriteLine("onChangeProject");
             //IProject project = PluginBase.CurrentProject;
             IProject project = notification.Body as IProject;
-            timerProxy.Timer.Stop();
+            //timerProxy.Timer.Stop();
             if (project == null)
             {
                 Console.WriteLine("Project closed");
@@ -135,7 +135,7 @@ namespace SlimTimer.control
             bool inRemoteTasks = false;
             foreach (Task task in taskProxy.Tasks)
             {
-                Console.WriteLine("checking task.Name " + task.Name);
+                //Console.WriteLine("checking task.Name " + task.Name);
                 if (task.Name == project.Name)
                 {
                     Console.WriteLine("Found matching task " + task.Name);

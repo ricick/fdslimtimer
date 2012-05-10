@@ -162,6 +162,8 @@ namespace Inikus.SlimTimer
             string Result = string.Empty;
             try
             {
+                wr.Timeout = 120000;
+                //Console.WriteLine(wr.Timeout);
                 response = (HttpWebResponse)wr.GetResponse();
                 if ((wr.CookieContainer.Count > 0))
                     _CC = wr.CookieContainer.GetCookies(wr.RequestUri);
@@ -184,6 +186,11 @@ namespace Inikus.SlimTimer
 
         private string ReadResponseStream(HttpWebResponse response)
         {
+            if (response == null)
+            {
+                Console.WriteLine("No response from server");
+                return null;
+            }
             StringBuilder Result = new StringBuilder(1024);
             Stream st = response.GetResponseStream();
             try
@@ -284,7 +291,7 @@ namespace Inikus.SlimTimer
                 Uri uri = new Uri(url.TrimEnd(','));
                 string Response = GetHttpPage(uri);
                 Collection<Task> tempTasks = ParseTasks(Response);
-                Console.WriteLine("got " + tempTasks.Count + " tasks");
+                //Console.WriteLine("got " + tempTasks.Count + " tasks");
                 if (tempTasks.Count < 50)
                 {
                     tasksPending = false;
@@ -531,12 +538,22 @@ namespace Inikus.SlimTimer
                 return null;
 
             // Build the URL string
-            string url = GetBaseURL() + "/tasks/" + taskId + "/time_entries" + GetURLParams() +
-                "&range_start=" + rangeStart.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + "&range_end=" + rangeEnd.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            //string url = GetBaseURL() + "/tasks/" + taskId + "/time_entries" + GetURLParams() +
+                //"&range_start=" + rangeStart.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + "&range_end=" + rangeEnd.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            string url = GetBaseURL() + "/tasks/" + taskId + "/time_entries" + GetURLParams();
             Console.WriteLine("getting entries from " + url);
-            string Response = GetHttpPage(new Uri(url));
+            try
+            {
+                string Response = GetHttpPage(new Uri(url));
+                return ParseTimeEntries(Response);
+            }
+            catch (WebException webEx)
+            {
+                Console.WriteLine("Error getting task time entries, server returned exception" + webEx);
+                return null;
+            }
+     
 
-            return ParseTimeEntries(Response);
         }
 
         /// <summary>
@@ -606,7 +623,7 @@ namespace Inikus.SlimTimer
                 request = RequestType.Put;
             }
             url += GetURLParams();
-
+            Console.WriteLine(url);
             // Create the XML data to send to SlimTimer
             XmlDocument data = new XmlDocument();
             data.CreateXmlDeclaration("1.0", "UTF-8", "");
@@ -733,6 +750,11 @@ namespace Inikus.SlimTimer
         /// <returns>text description of the error</returns>
         private string ParseError(string xmlResponse)
         {
+            if (xmlResponse == null)
+            {
+                Console.WriteLine("No error xml returned");
+                return null;
+            }
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(xmlResponse);
             return xml.InnerText;

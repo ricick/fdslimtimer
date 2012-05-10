@@ -275,8 +275,6 @@ namespace SlimTimer.view
         {
 
         }
-
-				
- 	}
+    }
 
 }

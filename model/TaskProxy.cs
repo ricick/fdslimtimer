@@ -5,6 +5,7 @@ using PureMVC.Patterns;
 using PureMVC.Interfaces;
 using Inikus.SlimTimer;
 using System.Collections.ObjectModel;
+using PluginCore;
 
 namespace SlimTimer.model
 {

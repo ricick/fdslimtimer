@@ -19,6 +19,7 @@ namespace SlimTimer.vo
         private bool fileComments = true;
         private int minimumTime = 5;
         private bool cleanupDuplicates = true;
+        private bool cleanupOverlaps = false;
         private bool askIgnoreProject = true;
         private string[] trackedProjects = new string[] { };
         private string[] ignoredProjects = new string[] { };
@@ -101,6 +102,19 @@ namespace SlimTimer.vo
             {
                 this.cleanupDuplicates = value;
                 FireChanged("cleanupDuplicates");
+            }
+        }
+        /// <summary> 
+        /// Get and sets the cleanupOverlaps
+        /// </summary>
+        [Description("Clean up overllpaing time entries on launch."), DefaultValue(true)]
+        public bool CleanupOverlaps
+        {
+            get { return this.cleanupOverlaps; }
+            set
+            {
+                this.cleanupOverlaps = value;
+                FireChanged("CleanupOverlaps");
             }
         }
         /// <summary> 
