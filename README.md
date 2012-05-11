@@ -49,23 +49,23 @@ Ability to map projects to different tasks
 Show recent entries in UI
 
 ##Changelog
-v0.2 - 28/7/09:
+###v0.2 - 28/7/09
 Fixed a bug where only seconds were being submitted
-v0.3 - 8/8/09:
+###v0.3 - 8/8/09
 Removed need to restart on settings change
 Added error handling for connection loss
-v0.4 - 22/8/09:
+###v0.4 - 22/8/09
 Fixed seconds bug (again   )
 Added track/ignore project functionality
-v0.5 - 22/9/09:
+###v0.5 - 22/9/09
 Added auto cleanup options
-v0.6 - 25/9/09:
+###v0.6 - 25/9/09
 Fixed localisation errors
-v0.7 - 22/9/10:
+###v0.7 - 22/9/10
 Fixed errors with api server move (no longer needs 2 dlls)
-v0.8 - 8/10/11:
+###v0.8 - 8/10/11
 Updated for FD4
-v0.9 - 10/5/12:
+###v0.9 - 10/5/12
 Fixed adding overlapping time entries
 Moved all server calls to threads to stop it locking up your FD
 Fixed duplicate projects being created when you have more than 50 active projects
